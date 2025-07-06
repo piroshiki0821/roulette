@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    <style>
+        table { border-collapse: collapse; width:50%; table-layout: fixed; margin: 0 auto;}
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+        .fixed-size-btn {
+    width: 150px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4 text-center">発表者：{{ remove[0] }}</h1>
+    <h3 class="mb-4 text-center">次の発表者：{{ remove[1] }}</h3>
+
+    <h1 class="mb-4">学生一覧</h1>
+    <h2 id="winner" class="text-center text-success" style="font-size: 2em; margin-bottom: 20px;"></h2>
+    <table id="student-table" class="table table-bordered table-striped w-75 mx-auto">
+        <thead class="table-light">
+            <tr>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% set maxlen = [col1 | length, col2 | length, col3 | length, col4 | length] | max %}
+            {% for i in range(maxlen) %}
+                {% set left1 = col1[i] if i < col1 | length else None %}
+                {% set left2 = col2[i] if i < col2 | length else None %}
+                {% set right1 = col3[i] if i < col3 | length else None %}
+                {% set right2 = col4[i] if i < col4 | length else None %}
+
+                {% if left1 or left2 or right1 or right2 %}
+                <tr>
+                    {% if left1 %}
+                        <td>{{ left1.name }}</td>
+                    {% endif %}
+                    {% if left2 %}
+                        <td>{{ left2.name }}</td>
+                    {% endif %}
+                    {% if right1 %}
+                        <td>{{ right1.name }}</td>
+                    {% endif %}
+                    {% if right2 %}
+                        <td>{{ right2.name }}</td>
+                    {% endif %}
+                </tr>
+               {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <button class="btn btn-primary btn-lg" onclick="startRoulette(callback)">Start</button>
+        <button class="btn btn-primary btn-lg" id="reloadBtn" style="display:none;" onclick="location.reload()">OK</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

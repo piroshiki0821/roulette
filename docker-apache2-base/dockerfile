@@ -1,0 +1,25 @@
+FROM ubuntu:22.04
+
+# 必須パッケージをインストール
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip apache2 libapache2-mod-wsgi-py3 locales vim less && \
+    apt-get clean
+
+# ロケール設定（任意）
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
+ENV LANGUAGE ja_JP:ja
+ENV LC_ALL=ja_JP.UTF-8
+ENV TZ JST-9
+ENV TERM xterm
+
+# Flaskをsystem Pythonにインストール
+RUN python3 -m pip install --upgrade pip setuptools flask
+
+# WSGIモジュール有効化
+RUN a2enmod wsgi
+
+# 作業ディレクトリ
+WORKDIR /app
+
+CMD ["apachectl", "-D", "FOREGROUND"]
